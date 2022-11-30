@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruoyi.es.mapper.TsMapper">
+
+    <resultMap type="com.ruoyi.es.bean.mysql.TsBean" id="UserBeanResult">
+        <result property="id" column="id"/>
+        <result property="ts" column="ts"/>
+
+    </resultMap>
+
+    <sql id="selectUserBeanVo">
+        select id, ts from ts_info
+    </sql>
+
+    <select id="selectUserBeanList" parameterType="String" resultMap="UserBeanResult">
+        <include refid="selectUserBeanVo"/>
+        <where>
+            <if test="id!=null">and id = #{id}</if>
+            <if test="ts!=null">and ts = #{ts}</if>
+
+        </where>
+    </select>
+
+
+    <select id="selectLikeUserBeanList" parameterType="String" resultMap="UserBeanResult">
+        <include refid="selectUserBeanVo"/>
+        <where>
+            <if test="ts!=null">or ts like concat('%',#{ts},'%')</if>
+
+        </where>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="include :: header('搜索列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    const dataSource=[[${list}]];
+    var field=dataSource[0];
+    var keyword=dataSource[1];
+    var prefix = ctx +"es";
+    $(function () {
+        var options = {
+            url: prefix +  '/searchEsIps/'+"/"+field+"/"+keyword,
+            sidePagination: "client",
+            columns: [
+                {
+                    field: 'action',
+                    title: 'action',
+                    // visible: false
+                },
+                {
+                    field: 'dstIP',
+                    title: 'dstIP'
+                },
+                {
+                    field: 'dstPort',
+                    title: 'dstPort'
+                },
+                {
+                    field: 'srcIP',
+                    title: 'srcIP'
+                },
+                {
+                    field: 'srcPort',
+                    title: 'srcPort'
+                },
+                {
+                    field: 'eventName',
+                    title: 'eventName'
+                },
+                {
+                    field: 'DMAC',
+                    title: 'DMAC',
+                    visible: false
+                },
+                {
+                    field: 'HOSTNAME',
+                    title: 'HOSTNAME',
+                    visible: false
+                },
+                {
+                    field: 'IP',
+                    title: 'IP',
+                    visible: false
+                },
+                {
+                    field: 'MON',
+                    title: 'MON',
+                    visible: false
+                },
+                {
+                    field: 'PACKAGE',
+                    title: 'PACKAGE',
+                    visible: false
+                },
+                {
+                    field: 'SERVERNAME',
+                    title: 'SERVERNAME',
+                    visible: false
+                },
+                {
+                    field: 'SMAC',
+                    title: 'SMAC',
+                    visible: false
+                },
+                {
+                    field: 'dstIPVer',
+                    title: 'dstIPVer',
+                    visible: false
+                },
+                {
+                    field: 'eventID',
+                    title: 'eventID',
+                    visible: false
+                },
+                {
+                    field: 'eventLevel',
+                    title: 'eventLevel',
+                    visible: false
+                },
+                {
+                    field: 'eventsetName',
+                    title: 'eventsetName',
+                    visible: false
+                },
+                {
+                    field: 'evtCount',
+                    title: 'evtCount',
+                    visible: false
+                },
+                {
+                    field: 'fwPolicyID',
+                    title: 'fwPolicyID',
+                    visible: false
+                },
+                {
+                    field: 'genTime',
+                    title: 'genTime',
+                    visible: false
+                },
+                {
+                    field: 'inInterface',
+                    title: 'inInterface',
+                    visible: false
+                },
+                {
+                    field: 'intranet',
+                    title: 'intranet',
+                    visible: false
+                },
+                {
+                    field: 'logType',
+                    title: 'logType',
+                    visible: false
+                },
+                {
+                    field: 'outInterface',
+                    title: 'outInterface',
+                    visible: false
+                },
+                {
+                    field: 'pid',
+                    title: 'pid',
+                    visible: false
+                },
+                {
+                    field: 'protocol',
+                    title: 'protocol',
+                    visible: false
+                },
+                {
+                    field: 'protocolID',
+                    title: 'protocolID',
+                    visible: false
+                },
+                {
+                    field: 'protocolType',
+                    title: 'protocolType',
+                    visible: false
+                },
+                {
+                    field: 'securityID',
+                    title: 'securityID',
+                    visible: false
+                },
+                {
+                    field: 'securityType',
+                    title: 'securityType',
+                    visible: false
+                },
+                {
+                    field: 'serialNum',
+                    title: 'serialNum',
+                    visible: false
+                },
+                {
+                    field: 'srcIPVer',
+                    title: 'srcIPVer',
+                    visible: false
+                },
+                {
+                    field: 'vsysid',
+                    title: 'vsysid',
+                    visible: false
+                },
+
+            ]
+        };
+
+        $.table.init(options);
+    });
+</script>
+</body>
+<div th:include="include :: footer"></div>
+
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('nginx日志')" />
+</head>
+
+<!--<head th:include="include :: header"></head>-->
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            搜索remote_addr <input type="text" id="keyword" list="id_remote_addr" />
+                            <datalist id="id_remote_addr" ></datalist>
+                        </li>
+                        <li>
+                            搜索host <input type="text" id="keyword1" list="id_host" />
+                            <datalist id="id_host" ></datalist>
+                        </li>
+                        <li>
+                            搜索rps_status <input type="text" id="keyword2" list="id_rps_status" />
+                            <datalist id="id_rps_status" ></datalist>
+                        </li>
+                        <li>
+                            搜索req_uri <input type="text" id="keyword3" list="id_req_uri" />
+                            <datalist id="id_req_uri" ></datalist>
+                            <a class="btn btn-warning" onclick="searchA()"><i ></i>搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "es";
+    function searchA() {
+        // $("#type").val(type);
+        var keyword = $("#keyword").val();
+        var keyword1 = $("#keyword1").val();
+        var keyword2 = $("#keyword2").val();
+        var keyword3 = $("#keyword3").val();
+        if ((keyword == null || keyword == "")&(keyword1 == null || keyword1 == "")&
+            (keyword2 == null || keyword2 == "")&(keyword3 == null || keyword3 == "")) {
+            alert("请输入搜索内容");
+            return;
+        }
+        if (keyword.length>1) {
+            var field="remote_addr";
+            var url = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword;
+            createMenuItem(url, "搜索内容");
+        }else
+        if (keyword1.length>1) {
+            var field="host";
+            var url1 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword1;
+            createMenuItem(url1, "搜索内容");
+        }else
+        if (keyword2.length>1) {
+            var field="rps_status";
+            var url2 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword2;
+            createMenuItem(url2, "搜索内容");
+        }else
+        if (keyword3.length>1) {
+            var field="req_uri";
+            var url3 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword3;
+            createMenuItem(url3, "搜索内容");
+        }
+
+    }
+
+    function a(){
+
+        $.ajax({
+            url: prefix + '/searchAllNginxField',
+
+            success:function(data){
+
+                var Remote_addr = [];
+                var Host = [];
+                var Hps_status = [];
+                var Req_uri = [];
+
+                var remote_addr="";
+                var host="";
+                var rps_status="";
+                var req_uri="";
+
+
+                for (var i=0;i<data.length;i++) {
+                    Remote_addr.push(data[i].remote_addr);
+                    Host.push(data[i].host);
+                    Hps_status.push(data[i].rps_status);
+                    Req_uri.push(data[i].req_uri);
+
+                }
+                var Remote_addrData = Array.from(new Set(Remote_addr))
+                var HostData = Array.from(new Set(Host))
+                var Hps_statusData = Array.from(new Set(Hps_status))
+                var Req_uriData = Array.from(new Set(Req_uri))
+
+                for (var j=0;j<Remote_addrData.length;j++) {
+                    remote_addr +="<option value='" + Remote_addrData[j]+  "'>" + Remote_addrData[j]+  "</option>";
+                }
+                for (var j=0;j<HostData.length;j++) {
+                    host +="<option value='" + HostData[j]+  "'>" + HostData[j]+  "</option>";
+                }
+                for (var j=0;j<Hps_statusData.length;j++) {
+                    rps_status +="<option value='" + Hps_statusData[j]+  "'>" + Hps_statusData[j]+  "</option>";
+                }
+                for (var j=0;j<Req_uriData.length;j++) {
+                    req_uri +="<option value='" + Req_uriData[j]+  "'>" + Req_uriData[j]+  "</option>";
+                }
+
+                document.getElementById("id_remote_addr").innerHTML=remote_addr;
+                document.getElementById("id_host").innerHTML=host;
+                document.getElementById("id_rps_status").innerHTML=rps_status;
+                document.getElementById("id_req_uri").innerHTML=req_uri;
+            }
+        })
+    }
+
+    $(function () {
+        a();
+        var options = {
+            url: prefix + "/selectAllNginx",
+            sidePagination: "client",
+            columns: [
+                {
+                    field: 'remote_addr',
+                    title: 'remote_addr'
+                },
+                {
+                    field: 'host',
+                    title: 'host'
+                },
+                {
+                    field: 'rps_status',
+                    title: 'rps_status'
+                },
+                {
+                    field: 'req_uri',
+                    title: 'req_uri'
+                },
+            ]
+        };
+        $.table.init(options);
+    });
+
+</script>
+</body>
+</html>

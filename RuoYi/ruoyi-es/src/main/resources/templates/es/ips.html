@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('IPS日志')" />
+</head>
+
+<!--<head th:include="include :: header"></head>-->
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								搜索action <input type="text" id="keyword" list="id_action" />
+								<datalist id="id_action" ></datalist>
+							</li>
+							<li>
+								搜索dstIP <input type="text" id="keyword1" list="id_dstIP" />
+								<datalist id="id_dstIP" ></datalist>
+							</li>
+							<li>
+								搜索dstPort <input type="text" id="keyword2" list="id_dstPort" />
+								<datalist id="id_dstPort" ></datalist>
+							</li>
+							<li>
+								搜索srcIP <input type="text" id="keyword3" list="id_srcIP" />
+								<datalist id="id_srcIP" ></datalist>
+							</li>
+							<li>
+								搜索srcPort <input type="text" id="keyword4" list="id_srcPort" />
+								<datalist id="id_srcPort" ></datalist>
+							</li>
+							<li>
+								搜索eventName <input type="text" id="keyword5" list="id_eventName" />
+								<datalist id="id_eventName" ></datalist>
+								<a class="btn btn-warning" onclick="searchA()"><i ></i>搜索</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+			var prefix = ctx +"es";
+
+			function searchA() {
+				// $("#type").val(type);
+				var keyword = $("#keyword").val();
+				var keyword1 = $("#keyword1").val();
+				var keyword2 = $("#keyword2").val();
+				var keyword3 = $("#keyword3").val();
+				var keyword4 = $("#keyword4").val();
+				var keyword5 = $("#keyword5").val();
+					if ((keyword == null || keyword == "")&(keyword1 == null || keyword1 == "")&
+							(keyword2 == null || keyword2 == "")&(keyword3 == null || keyword3 == "")&
+							(keyword4 == null || keyword4 == "")&(keyword5 == null || keyword5 == "")) {
+						alert("请输入搜索内容");
+						return;
+					}
+				if (keyword.length>1) {
+					var field="Action";
+					var url = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword;
+					createMenuItem(url, "搜索内容");
+				}else
+				if (keyword1.length>1) {
+					var field="DstIP";
+					var url1 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword1;
+					createMenuItem(url1, "搜索内容");
+				}else
+				if (keyword2.length>1) {
+					var field="DstPort";
+					var url2 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword2;
+					createMenuItem(url2, "搜索内容");
+				}else
+				if (keyword3.length>1) {
+					var field="SrcIP";
+					var url3 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword3;
+					createMenuItem(url3, "搜索内容");
+				}else
+				if (keyword4.length>1) {
+					var field="SrcPort";
+					var url4 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword4;
+					createMenuItem(url4, "搜索内容");
+				}else
+				if (keyword5.length>1) {
+					var field="EventName";
+					var url5 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword5;
+					createMenuItem(url5, "搜索内容");
+				}
+
+			}
+
+
+
+			// function a(){
+			// 	$("#keyword").val($("#select option:selected").text());
+			// 	searchES();
+			// }
+
+			function b(){
+
+				$.ajax({
+					url: prefix + '/searchAllIpsField',
+
+					success:function(data){
+
+						var Action = [];
+						var DstIP = [];
+						var DstPort = [];
+						var SrcIP = [];
+						var SrcPort = [];
+						var EventName = [];
+
+						var action="";
+						var dstIP="";
+						var dstPort="";
+						var srcIP="";
+						var srcPort="";
+						var eventName="";
+
+						for (var i=0;i<data.length;i++) {
+							Action.push(data[i].action);
+							DstIP.push(data[i].dstIP);
+							DstPort.push(data[i].dstPort);
+							SrcIP.push(data[i].srcIP);
+							SrcPort.push(data[i].srcPort);
+							EventName.push(data[i].eventName);
+						}
+						var ActionData = Array.from(new Set(Action))
+						var DstIPData = Array.from(new Set(DstIP))
+						var DstPortData = Array.from(new Set(DstPort))
+						var SrcIPData = Array.from(new Set(SrcIP))
+						var SrcPortData = Array.from(new Set(SrcPort))
+						var EventNameData = Array.from(new Set(EventName))
+						for (var j=0;j<ActionData.length;j++) {
+							action +="<option value='" + ActionData[j]+  "'>" + ActionData[j]+  "</option>";
+						}
+						for (var j=0;j<DstIPData.length;j++) {
+							dstIP +="<option value='" + DstIPData[j]+  "'>" + DstIPData[j]+  "</option>";
+						}
+						for (var j=0;j<DstPortData.length;j++) {
+							dstPort +="<option value='" + DstPortData[j]+  "'>" + DstPortData[j]+  "</option>";
+						}
+						for (var j=0;j<SrcIPData.length;j++) {
+							srcIP +="<option value='" + SrcIPData[j]+  "'>" + SrcIPData[j]+  "</option>";
+						}
+						for (var j=0;j<SrcPortData.length;j++) {
+							srcPort +="<option value='" + SrcPortData[j]+  "'>" + SrcPortData[j]+  "</option>";
+						}
+						for (var j=0;j<EventNameData.length;j++) {
+							eventName +="<option value='" + EventNameData[j]+  "'>" + EventNameData[j]+  "</option>";
+						}
+
+						document.getElementById("id_action").innerHTML=action;
+						document.getElementById("id_dstIP").innerHTML=dstIP;
+						document.getElementById("id_dstPort").innerHTML=dstPort;
+						document.getElementById("id_srcIP").innerHTML=srcIP;
+						document.getElementById("id_srcPort").innerHTML=srcPort;
+						document.getElementById("id_eventName").innerHTML=eventName;
+					}
+				})
+			}
+
+			$(function () {
+				b();
+				var options = {
+					url: prefix + "/selectAllIps",
+					sidePagination: "client",
+					columns: [
+						{
+							field: 'action',
+							title: 'action',
+							// visible: false
+						},
+						{
+							field: 'dstIP',
+							title: 'dstIP'
+						},
+						{
+							field: 'dstPort',
+							title: 'dstPort'
+						},
+						{
+							field: 'srcIP',
+							title: 'srcIP'
+						},
+						{
+							field: 'srcPort',
+							title: 'srcPort'
+						},
+						{
+							field: 'eventName',
+							title: 'eventName'
+						},
+						{
+							field: 'DMAC',
+							title: 'DMAC',
+							visible: false
+						},
+						{
+							field: 'HOSTNAME',
+							title: 'HOSTNAME',
+							visible: false
+						},
+						{
+							field: 'IP',
+							title: 'IP',
+							visible: false
+						},
+						{
+							field: 'MON',
+							title: 'MON',
+							visible: false
+						},
+						{
+							field: 'PACKAGE',
+							title: 'PACKAGE',
+							visible: false
+						},
+						{
+							field: 'SERVERNAME',
+							title: 'SERVERNAME',
+							visible: false
+						},
+						{
+							field: 'SMAC',
+							title: 'SMAC',
+							visible: false
+						},
+						{
+							field: 'dstIPVer',
+							title: 'dstIPVer',
+							visible: false
+						},
+						{
+							field: 'eventID',
+							title: 'eventID',
+							visible: false
+						},
+						{
+							field: 'eventLevel',
+							title: 'eventLevel',
+							visible: false
+						},
+						{
+							field: 'eventsetName',
+							title: 'eventsetName',
+							visible: false
+						},
+						{
+							field: 'evtCount',
+							title: 'evtCount',
+							visible: false
+						},
+						{
+							field: 'fwPolicyID',
+							title: 'fwPolicyID',
+							visible: false
+						},
+						{
+							field: 'genTime',
+							title: 'genTime',
+							visible: false
+						},
+						{
+							field: 'inInterface',
+							title: 'inInterface',
+							visible: false
+						},
+						{
+							field: 'intranet',
+							title: 'intranet',
+							visible: false
+						},
+						{
+							field: 'logType',
+							title: 'logType',
+							visible: false
+						},
+						{
+							field: 'outInterface',
+							title: 'outInterface',
+							visible: false
+						},
+						{
+							field: 'pid',
+							title: 'pid',
+							visible: false
+						},
+						{
+							field: 'protocol',
+							title: 'protocol',
+							visible: false
+						},
+						{
+							field: 'protocolID',
+							title: 'protocolID',
+							visible: false
+						},
+						{
+							field: 'protocolType',
+							title: 'protocolType',
+							visible: false
+						},
+						{
+							field: 'securityID',
+							title: 'securityID',
+							visible: false
+						},
+						{
+							field: 'securityType',
+							title: 'securityType',
+							visible: false
+						},
+						{
+							field: 'serialNum',
+							title: 'serialNum',
+							visible: false
+						},
+						{
+							field: 'srcIPVer',
+							title: 'srcIPVer',
+							visible: false
+						},
+						{
+							field: 'vsysid',
+							title: 'vsysid',
+							visible: false
+						},
+
+						]
+				};
+				$.table.init(options);
+			});
+
+	</script>
+</body>
+</html>

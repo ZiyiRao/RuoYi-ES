@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head>
+    <th:block th:include="include :: header('搜索列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    const dataSource=[[${list1}]];
+    var field=dataSource[0];
+    var keyword=dataSource[1];
+    var prefix = ctx +"es";
+    $(function () {
+        var options = {
+            url: prefix +  '/searchEsNginx/'+"/"+field+"/"+keyword,
+            sidePagination: "client",
+            columns: [
+                {
+                    field: 'remote_addr',
+                    title: 'remote_addr'
+                },
+                {
+                    field: 'host',
+                    title: 'host'
+                },
+                {
+                    field: 'rps_status',
+                    title: 'rps_status'
+                },
+                {
+                    field: 'req_uri',
+                    title: 'req_uri'
+                },
+            ]
+        };
+
+        $.table.init(options);
+    });
+</script>
+</body>
+<div th:include="include :: footer"></div>
+
+</html>
