@@ -1,5 +1,6 @@
 package com.ruoyi.es.service;
 
+import com.ruoyi.es.bean.es.EsNginxBean;
 import com.ruoyi.es.bean.es.EsUserBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -20,6 +21,9 @@ public interface EsService extends ElasticsearchRepository<EsUserBean,Integer> {
 //    List<EsUserBean> findAll(EsUserBean es);
     EsUserBean queryEmployeeById(String id);
 
-//    EsUserBean search();
+
+    List selectEsBean(String index,String bean);
+    List selectField(String index,String bean,String field,String keyword);
+//    List<EsNginxBean> selectEsNginxBean(String index);
 }
 

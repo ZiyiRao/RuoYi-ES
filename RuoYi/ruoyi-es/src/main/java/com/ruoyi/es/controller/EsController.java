@@ -75,81 +75,16 @@ public class EsController extends BaseController {
     @ResponseBody
     @PostMapping("/selectAllIps")
     public TableDataInfo selectAllIps(){
-//        startPage();
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsUserBean> resultList = new LinkedList();		//返回的结果list
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()     //创建 查询 对象
-                .size(100);                         //返结果size
-//                .sort(new FieldSortBuilder("@timestamp")      //排序
-//                .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("net-ips22-2020.08.13")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsUserBean t = JSON.parseObject(r, EsUserBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        } finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object = JSONArray.fromObject(resultList);
-
+        List<EsUserBean> ips=esService.selectEsBean("net-ips22-2020.08.13","EsUserBean");
+        JSONArray object = JSONArray.fromObject(ips);
         return getDataTable(object);
     }
-
 
     @ResponseBody
     @PostMapping("/selectAllNginx")
     public TableDataInfo selectAllNginx(){
-//        startPage();
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsNginxBean> resultList = new LinkedList();		//返回的结果list
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()     //创建 查询 对象
-                .size(200);                         //返结果size
-//                .sort(new FieldSortBuilder("@timestamp")      //排序
-//                .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("nginx-client-2022.10")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsNginxBean t = JSON.parseObject(r, EsNginxBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        } finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object = JSONArray.fromObject(resultList);
-
+        List<EsNginxBean> nginx=esService.selectEsBean("nginx-client-2022.10","EsNginxBean");
+        JSONArray object = JSONArray.fromObject(nginx);
         return getDataTable(object);
     }
     /**
@@ -200,81 +135,16 @@ public class EsController extends BaseController {
     @ResponseBody
     @PostMapping("/searchEsIps/{field}/{keyword}")
     public TableDataInfo searchEsIps(@PathVariable("field")String field,@PathVariable("keyword")String keyword) {
-//        startPage();
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsUserBean> resultList = new LinkedList();		//返回的结果list
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()     //创建 查询 对象
-                .size(20);                         //返结果size
-//                .sort(new FieldSortBuilder("@timestamp")      //排序
-//                .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("net-ips22-2020.08.13")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-                sourceBuilder.query(QueryBuilders.matchQuery(field,keyword));
-//            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsUserBean t = JSON.parseObject(r, EsUserBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        } finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object = JSONArray.fromObject(resultList);
-
+        List<EsUserBean> ips=esService.selectField("net-ips22-2020.08.13","EsUserBean",field,keyword);
+        JSONArray object = JSONArray.fromObject(ips);
         return getDataTable(object);
     }
 
     @ResponseBody
     @PostMapping("/searchEsNginx/{field}/{keyword}")
     public TableDataInfo searchEsNginx(@PathVariable("field")String field,@PathVariable("keyword")String keyword) {
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsNginxBean> resultList = new LinkedList();		//返回的结果list
-
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()     //创建 查询 对象
-                .size(20);                         //返结果size
-//                .sort(new FieldSortBuilder("@timestamp")      //排序
-//                .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("nginx-client-2022.10")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-            sourceBuilder.query(QueryBuilders.matchQuery(field,keyword));
-//            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsNginxBean t = JSON.parseObject(r, EsNginxBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        } finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object = JSONArray.fromObject(resultList);
-        System.out.println(object);
+        List<EsNginxBean> nginx=esService.selectField("nginx-client-2022.10","EsNginxBean",field,keyword);
+        JSONArray object = JSONArray.fromObject(nginx);
         return getDataTable(object);
     }
 
@@ -282,80 +152,16 @@ public class EsController extends BaseController {
     @ResponseBody
     @GetMapping("/searchAllIpsField")
     public List<EsUserBean> searchAllIpsField(){
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsUserBean> resultList = new ArrayList();		//返回的结果list
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()      //创建 查询 对象
-                .size(1000)                              //返结果size
-                .sort(new FieldSortBuilder("@timestamp")      //排序
-                        .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("net-ips22-2020.08.13")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsUserBean t = JSON.parseObject(r, EsUserBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object2 = JSONArray.fromObject(resultList);
-        String str=JSON.toJSON(resultList).toString();
-//      System.out.println(object2);
-        return object2;
+        List<EsUserBean> ips=esService.selectEsBean("net-ips22-2020.08.13","EsUserBean");
+        JSONArray object = JSONArray.fromObject(ips);
+        return object;
     }
 
     @ResponseBody
     @GetMapping("/searchAllNginxField")
     public List<EsNginxBean> searchAllNginxField(){
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
-        List<EsNginxBean> resultList = new ArrayList();		//返回的结果list
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()      //创建 查询 对象
-                .size(1000)                              //返结果size
-                .sort(new FieldSortBuilder("@timestamp")      //排序
-                        .order(SortOrder.DESC));                     //正序
-        SearchRequest rq = new SearchRequest("nginx-client-2022.10")  //请求 索引库
-                .source(sourceBuilder);						 //组装查询条件
-        try {
-            sourceBuilder.query(QueryBuilders.matchAllQuery());
-            rq.source(sourceBuilder);
-            SearchResponse resp = client.search(rq, RequestOptions.DEFAULT);
-            for (SearchHit hit : resp.getHits()) {
-                com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(hit.toString());
-                String r = jsonObject.getString("_source");
-                EsNginxBean t = JSON.parseObject(r, EsNginxBean.class);
-                resultList.add(t);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                client.close();    //关闭连接
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        JSONArray object = JSONArray.fromObject(resultList);
-        String str=JSON.toJSON(resultList).toString();
-//      System.out.println(object);
+        List<EsNginxBean> nginx=esService.selectEsBean("nginx-client-2022.10","EsNginxBean");
+        JSONArray object = JSONArray.fromObject(nginx);
         return object;
     }
 

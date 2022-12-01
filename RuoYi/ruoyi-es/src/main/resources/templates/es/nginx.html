@@ -54,22 +54,22 @@
             alert("请输入搜索内容");
             return;
         }
-        if (keyword.length>1) {
+        if (keyword.length>0) {
             var field="remote_addr";
             var url = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword;
             createMenuItem(url, "搜索内容");
         }else
-        if (keyword1.length>1) {
+        if (keyword1.length>0) {
             var field="host";
             var url1 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword1;
             createMenuItem(url1, "搜索内容");
         }else
-        if (keyword2.length>1) {
+        if (keyword2.length>0) {
             var field="rps_status";
             var url2 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword2;
             createMenuItem(url2, "搜索内容");
         }else
-        if (keyword3.length>1) {
+        if (keyword3.length>0) {
             var field="req_uri";
             var url3 = prefix + '/searchNginxField/'  + "/" +field+ "/" +keyword3;
             createMenuItem(url3, "搜索内容");

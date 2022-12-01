@@ -66,32 +66,32 @@
 						alert("请输入搜索内容");
 						return;
 					}
-				if (keyword.length>1) {
+				if (keyword.length>0) {
 					var field="Action";
 					var url = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword;
 					createMenuItem(url, "搜索内容");
 				}else
-				if (keyword1.length>1) {
+				if (keyword1.length>0) {
 					var field="DstIP";
 					var url1 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword1;
 					createMenuItem(url1, "搜索内容");
 				}else
-				if (keyword2.length>1) {
+				if (keyword2.length>0) {
 					var field="DstPort";
 					var url2 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword2;
 					createMenuItem(url2, "搜索内容");
 				}else
-				if (keyword3.length>1) {
+				if (keyword3.length>0) {
 					var field="SrcIP";
 					var url3 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword3;
 					createMenuItem(url3, "搜索内容");
 				}else
-				if (keyword4.length>1) {
+				if (keyword4.length>0) {
 					var field="SrcPort";
 					var url4 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword4;
 					createMenuItem(url4, "搜索内容");
 				}else
-				if (keyword5.length>1) {
+				if (keyword5.length>0) {
 					var field="EventName";
 					var url5 = prefix + '/searchIpsField/'  + "/" +field+ "/" +keyword5;
 					createMenuItem(url5, "搜索内容");
